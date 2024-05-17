@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang = "eng-Us" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<link rel = "stylesheet" type = "text/css" th:href = "@{/css/checkout.css}">
+<head>
+<title>Check out Process</title>
+</head>
+<body>
+   <section class = "container">
+    <ul th:each="order : ${orders}">
+    			<h2 class="p-3">
+    					Table No. <span class="highlight text-danger" th:text="${order.tableNumber}"></span> Bill
+				</h2>
+        <li class="mt-3">
+            <span th:text="'Order ' + ${order.orderId} + ': ' + ${order.itemName} + 'x' + ${order.quantity}"></span>
+            🍟🍕
+        </li>
+        <li>Total:✔<span th:text="${totalBill}"></span>💲</li>
+    </ul>
+    <button onclick="window.print()">Print</button>
+    <a th:href = "@{/orders}">Main Tables List</a>	
+   </section>
+</body>
+</html>

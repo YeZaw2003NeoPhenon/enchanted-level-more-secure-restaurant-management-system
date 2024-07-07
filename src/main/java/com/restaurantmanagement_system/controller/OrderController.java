@@ -2,6 +2,8 @@ package com.restaurantmanagement_system.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,12 +22,15 @@ public class OrderController {
 	@Autowired
 	private orderServiceImp orderServiceImp;
 	
-	@RequestMapping( value = {"/" , "orders"} , method = RequestMethod.GET )
+	private Logger order_logger = LoggerFactory.getLogger(OrderController.class); 
+	
+	@RequestMapping( value = {"/" , "/orders"} , method = RequestMethod.GET )
 	public ModelAndView getAllOrders(){
 		ModelAndView modelAndView = new ModelAndView();
 		List<Order> orderList = orderServiceImp.getAllOrders();
 	    System.out.println("Order List: " + orderList);
 		modelAndView.addObject("orderList", orderList);
+		order_logger.info("Gathering up All Orders");
 		modelAndView.setViewName("orders");
 		return modelAndView;
 	}
@@ -46,6 +51,7 @@ public class OrderController {
 		
 		if( orderResult > 0 ) {
 			redirectAttributes.addFlashAttribute("orderResult", orderResult ); // carried out items enhancements successfully
+			order_logger.info(" Order Created : {} " + order.getOrderId());
 			modelAndView.setViewName("redirect:/orders");
 		}
 		else {
@@ -63,11 +69,12 @@ public class OrderController {
 	    modelAndView.setViewName("redirect:/orders");
 	    int rowEffected = orderServiceImp.deleteOrder(orderId);
 	    if( rowEffected == 0 ) {
+			order_logger.error(" Order Incapacitatingly failed to delete!");
 	    	redirectAttributes.addFlashAttribute("rowEffected", rowEffected);
 	    }
-	    
 	    else {
 	    	redirectAttributes.addFlashAttribute("errorMessage","Items Deleted Vivaciously");
+			order_logger.info(" Order Deleted : {} " + orderId);
 	    }
 	    
 	    return modelAndView;
@@ -77,7 +84,9 @@ public class OrderController {
 	public ModelAndView editOrder(@PathVariable int orderId) {
 	    ModelAndView modelAndView = new ModelAndView();
 	    Order order = orderServiceImp.getOrderById(orderId);
+		order_logger.info(" Order Created : {} ");
 	    modelAndView.addObject("order",order);
+	    order_logger.info("Editing Order : {} " + orderId);
 	    modelAndView.setViewName("updateForm");
 	    return modelAndView;
 	}
@@ -89,30 +98,14 @@ public class OrderController {
 	        int result = orderServiceImp.updateOrder(updatedOrder);
 	        if (result > 0) {
 	            redirectAttributes.addFlashAttribute("updateSuccess", true);
+	            order_logger.info("Order Updated Successfully : {} " + orderId );
 	        } else {
+	        	order_logger.warn("Erroneous popped while updating!" + orderId);
 	            redirectAttributes.addFlashAttribute("updateError", true);
 	        }
 	        modelAndView.setViewName("redirect:/orders");
 	        return modelAndView;
 	    }
-	   
-	   @RequestMapping(value = "/recordOrder", method = RequestMethod.POST)
-	   public ModelAndView recordOrder(@ModelAttribute Order order, RedirectAttributes redirectAttributes) {
-	       ModelAndView modelAndView = new ModelAndView();
-	       int orderResult = orderServiceImp.createOrder(order);
-	       
-	       if (orderResult > 0) {
-	           redirectAttributes.addFlashAttribute("orderResult", orderResult);
-	           modelAndView.setViewName("redirect:/orders");
-	       } else {
-	           redirectAttributes.addFlashAttribute("errorMessage", "Failed to create order! Please try again.");
-	           modelAndView.setViewName("redirect:/createOrder");
-	       }
-	       
-	       return modelAndView;
-	   }
-	   
-	  
 	   
 	   @RequestMapping(value = "/checkout/{tableNumber}", method = RequestMethod.GET)
 	   public ModelAndView checkout(@PathVariable int tableNumber) {
@@ -128,6 +121,7 @@ public class OrderController {
 	       double totalBill = orders.stream().mapToDouble( order -> order.getTotalPrices() * order.getQuantity()).sum();
 	 	   modelAndView.addObject("totalBill", totalBill);
 	  	   modelAndView.addObject("orders", orders);
+	  	   order_logger.info("Aggregating Total Bills" + totalBill );
 	       modelAndView.setViewName("checkout");
 	       return modelAndView;
 	   }

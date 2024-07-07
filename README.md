@@ -9,7 +9,7 @@ I have developed a Restaurant Management System using modern technologies and fr
 - ``Versatile CRUD Operations``: Facilitates the creation, reading, updating, and deletion of records effortlessly.
 - ``Modern Responsive Design``: Ensures an impeccable user-friendly experience with Thymeleaf templates and Bootstrap for a responsive UI.
 - ``Reliable Database Integration``: Utilizes PostgreSQL and JDBC template for effective data management.
-  
+- ``Logging`` : Noteworthy and astute logging.
 ## Spring Backend
 
 The backend is constructed using Spring MVC and Spring Security, facilitating secure user authentication and robust management of restaurant orders. It employs the JDBC template for efficient database interactions and integrates seamlessly with PostgreSQL for reliable data persistence.

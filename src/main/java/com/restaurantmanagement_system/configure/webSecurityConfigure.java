@@ -19,9 +19,7 @@ public class webSecurityConfigure {
 	
 	@Autowired
 	private userDetailServiceImp userDetailServiceImp;
-	
-	// in here , we ravashingly stuff up and bang away with autowired to inject the entire method with object
-	
+		
 	@Autowired
 	public void configureGlobal( AuthenticationManagerBuilder authenticationManagerBuilder ) throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailServiceImp);
@@ -36,7 +34,7 @@ public class webSecurityConfigure {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
 		http.
-		     csrf().disable() // try to impeccably stave off cross-site request forgerry 
+		     csrf().disable() 
 			.authorizeRequests()
 			.requestMatchers("/login").anonymous() // allow any anonynous users
 			.requestMatchers("/admin/**").hasRole("ADMIN")

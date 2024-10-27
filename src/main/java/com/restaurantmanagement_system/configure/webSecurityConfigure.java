@@ -40,7 +40,7 @@ public class webSecurityConfigure {
 			.authorizeRequests()
 			.requestMatchers("/login").anonymous() // allow any anonynous users
 			.requestMatchers("/admin/**").hasRole("ADMIN")
-			.requestMatchers("/users/**").hasRole("users")
+			.requestMatchers("/users/**").hasRole("USER")
 			.requestMatchers("/css/**","/img/**","/js/**","/file/**").permitAll() 
 			.anyRequest().authenticated()
 			.and()
